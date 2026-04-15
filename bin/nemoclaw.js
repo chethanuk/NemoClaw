@@ -775,6 +775,9 @@ function exitWithSpawnResult(result) {
   process.exit(1);
 }
 
+/**
+ * @param {{ write: (chunk: string) => unknown, isTTY?: boolean } | null | undefined} stream
+ */
 function resetTerminalTracking(stream = process.stderr) {
   if (!stream || typeof stream.write !== "function" || !stream.isTTY) return;
   stream.write("\x1b[?1000l\x1b[?1002l\x1b[?1003l\x1b[?1004l\x1b[?1006l\x1b[?1015l");

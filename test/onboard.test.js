@@ -108,7 +108,7 @@ describe("onboard helpers", () => {
         "ARG NEMOCLAW_MODEL=nvidia/nemotron-3-super-120b-a12b",
         "ARG NEMOCLAW_PROVIDER_KEY=nvidia",
         "ARG NEMOCLAW_PRIMARY_MODEL_REF=nvidia/nemotron-3-super-120b-a12b",
-        "ARG CHAT_UI_URL=http://127.0.0.1:18789",
+        "ARG CHAT_UI_URL=http://127.0.0.1:9997",
         "ARG NEMOCLAW_INFERENCE_COMPAT_B64=e30=",
         "ARG NEMOCLAW_WEB_CONFIG_B64=e30=",
         "ARG NEMOCLAW_BUILD_ID=default",
@@ -178,11 +178,11 @@ describe("onboard helpers", () => {
     expect(isLoopbackHostname("[::1]")).toBe(true);
     expect(isLoopbackHostname("chat.example.com")).toBe(false);
 
-    expect(resolveDashboardForwardTarget("http://127.0.0.1:18789")).toBe("18789");
-    expect(resolveDashboardForwardTarget("http://127.0.0.42:18789")).toBe("18789");
-    expect(resolveDashboardForwardTarget("http://[::1]:18789")).toBe("18789");
-    expect(resolveDashboardForwardTarget("https://chat.example.com")).toBe("0.0.0.0:18789");
-    expect(resolveDashboardForwardTarget("http://10.0.0.25:18789")).toBe("0.0.0.0:18789");
+    expect(resolveDashboardForwardTarget("http://127.0.0.1:9997")).toBe("9997");
+    expect(resolveDashboardForwardTarget("http://127.0.0.42:9997")).toBe("9997");
+    expect(resolveDashboardForwardTarget("http://[::1]:9997")).toBe("9997");
+    expect(resolveDashboardForwardTarget("https://chat.example.com")).toBe("0.0.0.0:9997");
+    expect(resolveDashboardForwardTarget("http://10.0.0.25:9997")).toBe("0.0.0.0:9997");
   });
 
   it("prints platform-appropriate service hints for port conflicts", () => {
@@ -202,7 +202,7 @@ describe("onboard helpers", () => {
         "ARG NEMOCLAW_MODEL=nvidia/nemotron-3-super-120b-a12b",
         "ARG NEMOCLAW_PROVIDER_KEY=nvidia",
         "ARG NEMOCLAW_PRIMARY_MODEL_REF=nvidia/nemotron-3-super-120b-a12b",
-        "ARG CHAT_UI_URL=http://127.0.0.1:18789",
+        "ARG CHAT_UI_URL=http://127.0.0.1:9997",
         "ARG NEMOCLAW_INFERENCE_BASE_URL=https://inference.local/v1",
         "ARG NEMOCLAW_INFERENCE_API=openai-completions",
         "ARG NEMOCLAW_INFERENCE_COMPAT_B64=e30=",
@@ -215,7 +215,7 @@ describe("onboard helpers", () => {
       patchStagedDockerfile(
         dockerfilePath,
         "claude-sonnet-4-5",
-        "http://127.0.0.1:18789",
+        "http://127.0.0.1:9997",
         "build-claude",
         "anthropic-prod",
       );
@@ -239,7 +239,7 @@ describe("onboard helpers", () => {
         "ARG NEMOCLAW_MODEL=nvidia/nemotron-3-super-120b-a12b",
         "ARG NEMOCLAW_PROVIDER_KEY=nvidia",
         "ARG NEMOCLAW_PRIMARY_MODEL_REF=nvidia/nemotron-3-super-120b-a12b",
-        "ARG CHAT_UI_URL=http://127.0.0.1:18789",
+        "ARG CHAT_UI_URL=http://127.0.0.1:9997",
         "ARG NEMOCLAW_INFERENCE_BASE_URL=https://inference.local/v1",
         "ARG NEMOCLAW_INFERENCE_API=openai-completions",
         "ARG NEMOCLAW_INFERENCE_COMPAT_B64=e30=",
@@ -254,7 +254,7 @@ describe("onboard helpers", () => {
       patchStagedDockerfile(
         dockerfilePath,
         "gpt-5.4",
-        "http://127.0.0.1:18789",
+        "http://127.0.0.1:9997",
         "build-web",
         "openai-api",
         null,
@@ -587,8 +587,8 @@ describe("onboard helpers", () => {
   });
 
   it("formatEnvAssignment produces NAME=VALUE pairs for sandbox env", () => {
-    expect(formatEnvAssignment("CHAT_UI_URL", "http://127.0.0.1:18789")).toBe(
-      "CHAT_UI_URL=http://127.0.0.1:18789",
+    expect(formatEnvAssignment("CHAT_UI_URL", "http://127.0.0.1:9997")).toBe(
+      "CHAT_UI_URL=http://127.0.0.1:9997",
     );
     expect(formatEnvAssignment("EMPTY", "")).toBe("EMPTY=");
   });
@@ -1486,8 +1486,8 @@ runner.run = (command, opts = {}) => {
 runner.runCapture = (command) => {
   if (command.includes("'sandbox' 'get' 'my-assistant'")) return "";
   if (command.includes("'sandbox' 'list'")) return "my-assistant Ready";
-  if (command.includes("sandbox exec my-assistant curl -sf http://localhost:18789/")) return "ok";
-  if (command.includes("'forward' 'list'")) return "18789 -> my-assistant:18789";
+  if (command.includes("sandbox exec my-assistant curl -sf http://localhost:9997/")) return "ok";
+  if (command.includes("'forward' 'list'")) return "9997 -> my-assistant:9997";
   return "";
 };
 registry.registerSandbox = () => true;
@@ -1553,7 +1553,7 @@ const { createSandbox } = require(${onboardPath});
     assert.doesNotMatch(createCommand.command, /SLACK_BOT_TOKEN=/);
     assert.ok(
       payload.commands.some((entry) =>
-        entry.command.includes("'forward' 'start' '--background' '18789' 'my-assistant'"),
+        entry.command.includes("'forward' 'start' '--background' '9997' 'my-assistant'"),
       ),
       "expected default loopback dashboard forward",
     );
@@ -1591,8 +1591,8 @@ runner.run = (command, opts = {}) => {
 runner.runCapture = (command) => {
   if (command.includes("'sandbox' 'get' 'my-assistant'")) return "";
   if (command.includes("'sandbox' 'list'")) return "my-assistant Ready";
-  if (command.includes("sandbox exec my-assistant curl -sf http://localhost:18789/")) return "ok";
-  if (command.includes("'forward' 'list'")) return "18789 -> my-assistant:18789";
+  if (command.includes("sandbox exec my-assistant curl -sf http://localhost:9997/")) return "ok";
+  if (command.includes("'forward' 'list'")) return "9997 -> my-assistant:9997";
   return "";
 };
 registry.registerSandbox = () => true;
@@ -1641,7 +1641,7 @@ const { createSandbox } = require(${onboardPath});
     const commands = JSON.parse(result.stdout.trim().split("\n").pop());
     assert.ok(
       commands.some((entry) =>
-        entry.command.includes("'forward' 'start' '--background' '0.0.0.0:18789' 'my-assistant'"),
+        entry.command.includes("'forward' 'start' '--background' '0.0.0.0:9997' 'my-assistant'"),
       ),
       "expected remote dashboard forward target",
     );
@@ -1685,7 +1685,7 @@ runner.runCapture = (command) => {
   if (command.includes("'sandbox' 'get' 'my-assistant'")) return "";
   if (command.includes("'sandbox' 'list'")) return "my-assistant Ready";
   if (command.includes("'provider' 'get'")) return "Provider: discord-bridge";
-  if (command.includes("'forward' 'list'")) return "18789 -> my-assistant:18789";
+  if (command.includes("'forward' 'list'")) return "9997 -> my-assistant:9997";
   return "";
 };
 registry.registerSandbox = () => true;
@@ -1922,7 +1922,7 @@ runner.runCapture = (command) => {
   if (command.includes("'sandbox' 'list'")) return "my-assistant Ready";
   // All messaging providers already exist in gateway
   if (command.includes("'provider' 'get'")) return "Provider: exists";
-  if (command.includes("'forward' 'list'")) return "18789 -> my-assistant:18789";
+  if (command.includes("'forward' 'list'")) return "9997 -> my-assistant:9997";
   return "";
 };
 registry.getSandbox = () => ({ name: "my-assistant", gpuEnabled: false });
@@ -2319,8 +2319,8 @@ runner.runCapture = (command) => {
     sandboxListCalls += 1;
     return sandboxListCalls >= 2 ? "my-assistant Ready" : "my-assistant Pending";
   }
-  if (command.includes("sandbox exec my-assistant curl -sf http://localhost:18789/")) return "ok";
-  if (command.includes("'forward' 'list'")) return "18789 -> my-assistant:18789";
+  if (command.includes("sandbox exec my-assistant curl -sf http://localhost:9997/")) return "ok";
+  if (command.includes("'forward' 'list'")) return "9997 -> my-assistant:9997";
   return "";
 };
 registry.registerSandbox = () => true;
@@ -2428,7 +2428,7 @@ runner.run = (command, opts = {}) => {
 runner.runCapture = (command) => {
   if (command.includes("'sandbox' 'get' 'my-assistant'")) return "my-assistant";
   if (command.includes("'sandbox' 'list'")) return "my-assistant Ready";
-  if (command.includes("'forward' 'list'")) return "18789 -> my-assistant:18789";
+  if (command.includes("'forward' 'list'")) return "9997 -> my-assistant:9997";
   return "";
 };
 registry.getSandbox = () => ({ name: "my-assistant", gpuEnabled: false });
@@ -2463,7 +2463,7 @@ const { createSandbox } = require(${onboardPath});
     assert.equal(payload.sandboxName, "my-assistant");
     assert.ok(
       payload.commands.some((entry) =>
-        entry.command.includes("'forward' 'start' '--background' '0.0.0.0:18789' 'my-assistant'"),
+        entry.command.includes("'forward' 'start' '--background' '0.0.0.0:9997' 'my-assistant'"),
       ),
       "expected dashboard forward restore on sandbox reuse",
     );
@@ -2700,8 +2700,8 @@ runner.run = (command, opts = {}) => {
 runner.runCapture = (command) => {
   if (command.includes("'sandbox' 'get' 'my-assistant'")) return "";
   if (command.includes("'sandbox' 'list'")) return "my-assistant Ready";
-  if (command.includes("sandbox exec my-assistant curl -sf http://localhost:18789/")) return "ok";
-  if (command.includes("'forward' 'list'")) return "18789 -> my-assistant:18789";
+  if (command.includes("sandbox exec my-assistant curl -sf http://localhost:9997/")) return "ok";
+  if (command.includes("'forward' 'list'")) return "9997 -> my-assistant:9997";
   return "";
 };
 registry.registerSandbox = () => true;
@@ -2827,8 +2827,8 @@ runner.run = (command, opts = {}) => {
 runner.runCapture = (command) => {
   if (command.includes("'sandbox' 'get' 'my-assistant'")) return "";
   if (command.includes("'sandbox' 'list'")) return "my-assistant Ready";
-  if (command.includes("sandbox exec my-assistant curl -sf http://localhost:18789/")) return "ok";
-  if (command.includes("'forward' 'list'")) return "18789 -> my-assistant:18789";
+  if (command.includes("sandbox exec my-assistant curl -sf http://localhost:9997/")) return "ok";
+  if (command.includes("'forward' 'list'")) return "9997 -> my-assistant:9997";
   return "";
 };
 registry.registerSandbox = () => true;

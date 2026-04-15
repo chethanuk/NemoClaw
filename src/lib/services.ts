@@ -20,7 +20,7 @@ import { join } from "node:path";
 export interface ServiceOptions {
   /** Sandbox name — must match the name used by start/stop/status. */
   sandboxName?: string;
-  /** Dashboard port for cloudflared (default: 18789). */
+  /** Dashboard port for cloudflared (default: 9997). */
   dashboardPort?: number;
   /** Repo root directory — used to locate scripts/. */
   repoDir?: string;
@@ -246,7 +246,7 @@ export function stopAll(opts: ServiceOptions = {}): void {
 
 export async function startAll(opts: ServiceOptions = {}): Promise<void> {
   const pidDir = resolvePidDir(opts);
-  const dashboardPort = opts.dashboardPort ?? (Number(process.env.DASHBOARD_PORT) || 18789);
+  const dashboardPort = opts.dashboardPort ?? (Number(process.env.DASHBOARD_PORT) || 9997);
 
   ensurePidDir(pidDir);
 

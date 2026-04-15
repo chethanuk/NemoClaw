@@ -7,7 +7,7 @@
 
 import { isLoopbackHostname } from "./url-utils";
 
-const CONTROL_UI_PORT = 18789;
+const CONTROL_UI_PORT = 9997;
 const CONTROL_UI_PATH = "/";
 
 export function resolveDashboardForwardTarget(

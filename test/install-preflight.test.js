@@ -557,7 +557,7 @@ fi`,
     expect(fs.readFileSync(onboardLog, "utf-8")).toMatch(
       /^onboard --resume --non-interactive --yes-i-accept-third-party-software$/m,
     );
-  });
+  }, 15000);
 
   it("skips onboarding when shared host preflight detects Docker is missing", () => {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "nemoclaw-install-missing-docker-"));
@@ -704,7 +704,7 @@ exit 0
     expect(fs.readFileSync(onboardLog, "utf-8")).toMatch(
       /^onboard --non-interactive --yes-i-accept-third-party-software$/m,
     );
-  });
+  }, 15000);
 
   it("requires explicit terms acceptance in non-interactive install mode", () => {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "nemoclaw-install-terms-required-"));

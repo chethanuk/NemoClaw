@@ -287,7 +287,7 @@ describe("CLI dispatch", () => {
     expect(r.code).toBe(0);
     expect(fs.readFileSync(openshellLog, "utf8")).toContain("sandbox delete alpha");
     expect(fs.readFileSync(openshellLog, "utf8")).toContain("NAME STATUS");
-    expect(fs.readFileSync(openshellLog, "utf8")).toContain("forward stop 18789");
+    expect(fs.readFileSync(openshellLog, "utf8")).toContain("forward stop 9997");
     expect(fs.readFileSync(openshellLog, "utf8")).toContain("gateway destroy -g nemoclaw");
     expect(fs.readFileSync(bashLog, "utf8")).toContain("docker volume ls -q --filter");
   });
@@ -553,7 +553,7 @@ describe("CLI dispatch", () => {
     );
     expect(registryAfter.sandboxes.alpha).toBeFalsy();
     expect(fs.readFileSync(openshellLog, "utf8")).toContain("sandbox delete alpha");
-    expect(fs.readFileSync(openshellLog, "utf8")).toContain("forward stop 18789");
+    expect(fs.readFileSync(openshellLog, "utf8")).toContain("forward stop 9997");
     expect(fs.readFileSync(openshellLog, "utf8")).toContain("gateway destroy -g nemoclaw");
     expect(fs.readFileSync(bashLog, "utf8")).toContain("docker volume ls -q --filter");
   });

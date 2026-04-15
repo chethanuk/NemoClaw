@@ -50,7 +50,7 @@ repos:
     hooks:
       - id: no-force-added-ignored
         name: Reject force-added ignored files
-        entry: bash -c 'IGNORED=$(git ls-files --ignored --exclude-standard --cached -- "$@") && if [ -n "$IGNORED" ]; then echo "Force-added files that .gitignore would block:" && echo "$IGNORED" && exit 1; fi' --
+        entry: bash -c 'bad=(); while IFS= read -r -d "" file; do if git check-ignore -q -- "$file"; then bad+=("$file"); fi; done < <(git diff --cached --name-only --diff-filter=A -z); if [ ${#bad[@]} -gt 0 ]; then echo "Force-added files that .gitignore would block:"; printf "%s\n" "${bad[@]}"; exit 1; fi' --
         language: system
         always_run: true
         pass_filenames: false

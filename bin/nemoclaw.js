@@ -67,7 +67,7 @@ const REMOTE_UNINSTALL_URL =
 let OPENSHELL_BIN = null;
 const MIN_LOGS_OPENSHELL_VERSION = "0.0.7";
 const NEMOCLAW_GATEWAY_NAME = "nemoclaw";
-const DASHBOARD_FORWARD_PORT = "18789";
+const DASHBOARD_FORWARD_PORT = "9997";
 
 function getOpenshellBinary() {
   if (!OPENSHELL_BIN) {
@@ -221,14 +221,14 @@ function executeSandboxCommand(sandboxName, command) {
 
 /**
  * Check whether the OpenClaw gateway process is running inside the sandbox.
- * Uses the gateway's HTTP endpoint (port 18789) as the source of truth,
+ * Uses the gateway's HTTP endpoint (port 9997) as the source of truth,
  * since the gateway runs as a separate user and pgrep may not see it.
  * Returns true (running), false (stopped), or null (cannot determine).
  */
 function isSandboxGatewayRunning(sandboxName) {
   const result = executeSandboxCommand(
     sandboxName,
-    "curl -sf --max-time 3 http://127.0.0.1:18789/ > /dev/null 2>&1 && echo RUNNING || echo STOPPED",
+    "curl -sf --max-time 3 http://127.0.0.1:9997/ > /dev/null 2>&1 && echo RUNNING || echo STOPPED",
   );
   if (!result) return null;
   if (result.stdout === "RUNNING") return true;
@@ -250,7 +250,7 @@ function recoverSandboxProcesses(sandboxName) {
     "[ -f ~/.bashrc ] && . ~/.bashrc 2>/dev/null;",
     // Re-check liveness before touching anything — another caller may have
     // already recovered the gateway between our initial check and now (TOCTOU).
-    "if curl -sf --max-time 3 http://127.0.0.1:18789/ > /dev/null 2>&1; then echo ALREADY_RUNNING; exit 0; fi;",
+    "if curl -sf --max-time 3 http://127.0.0.1:9997/ > /dev/null 2>&1; then echo ALREADY_RUNNING; exit 0; fi;",
     // Clean stale lock files from the previous run (gateway checks these)
     "rm -rf /tmp/openclaw-*/gateway.*.lock 2>/dev/null;",
     // Clean stale temp files from the previous run
@@ -275,7 +275,7 @@ function recoverSandboxProcesses(sandboxName) {
 }
 
 /**
- * Re-establish the dashboard port forward (18789) to the sandbox.
+ * Re-establish the dashboard port forward (9997) to the sandbox.
  */
 function ensureSandboxPortForward(sandboxName) {
   runOpenshell(["forward", "stop", DASHBOARD_FORWARD_PORT], { ignoreError: true });
@@ -775,6 +775,14 @@ function exitWithSpawnResult(result) {
   process.exit(1);
 }
 
+/**
+ * @param {{ write: (chunk: string) => unknown, isTTY?: boolean } | null | undefined} stream
+ */
+function resetTerminalTracking(stream = process.stderr) {
+  if (!stream || typeof stream.write !== "function" || !stream.isTTY) return;
+  stream.write("\x1b[?1000l\x1b[?1002l\x1b[?1003l\x1b[?1004l\x1b[?1006l\x1b[?1015l");
+}
+
 // ── Commands ─────────────────────────────────────────────────────
 
 async function onboard(args) {
@@ -1012,11 +1020,17 @@ async function listSandboxes() {
 async function sandboxConnect(sandboxName) {
   await ensureLiveSandboxOrExit(sandboxName);
   checkAndRecoverSandboxProcesses(sandboxName);
-  const result = spawnSync(getOpenshellBinary(), ["sandbox", "connect", sandboxName], {
-    stdio: "inherit",
-    cwd: ROOT,
-    env: process.env,
-  });
+  let result;
+  try {
+    result = spawnSync(getOpenshellBinary(), ["sandbox", "connect", sandboxName], {
+      stdio: "inherit",
+      cwd: ROOT,
+      env: process.env,
+    });
+  } finally {
+    resetTerminalTracking(process.stderr);
+    resetTerminalTracking(process.stdout);
+  }
   exitWithSpawnResult(result);
 }
 

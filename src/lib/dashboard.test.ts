@@ -7,50 +7,50 @@ import { resolveDashboardForwardTarget, buildControlUiUrls } from "../../dist/li
 
 describe("resolveDashboardForwardTarget", () => {
   it("returns port-only for localhost URL", () => {
-    expect(resolveDashboardForwardTarget("http://127.0.0.1:18789")).toBe("18789");
+    expect(resolveDashboardForwardTarget("http://127.0.0.1:9997")).toBe("9997");
   });
 
   it("returns port-only for localhost hostname", () => {
-    expect(resolveDashboardForwardTarget("http://localhost:18789")).toBe("18789");
+    expect(resolveDashboardForwardTarget("http://localhost:9997")).toBe("9997");
   });
 
   it("binds to 0.0.0.0 for non-loopback URL", () => {
-    expect(resolveDashboardForwardTarget("http://my-server.example.com:18789")).toBe(
-      "0.0.0.0:18789",
+    expect(resolveDashboardForwardTarget("http://my-server.example.com:9997")).toBe(
+      "0.0.0.0:9997",
     );
   });
 
   it("returns port-only for empty input", () => {
-    expect(resolveDashboardForwardTarget("")).toBe("18789");
+    expect(resolveDashboardForwardTarget("")).toBe("9997");
   });
 
   it("returns port-only for default", () => {
-    expect(resolveDashboardForwardTarget()).toBe("18789");
+    expect(resolveDashboardForwardTarget()).toBe("9997");
   });
 
   it("handles URL without scheme", () => {
-    expect(resolveDashboardForwardTarget("remote-host:18789")).toBe("0.0.0.0:18789");
+    expect(resolveDashboardForwardTarget("remote-host:9997")).toBe("0.0.0.0:9997");
   });
 
   it("handles invalid URL containing localhost in catch path", () => {
     // This triggers the catch branch since ://localhost is not a valid URL
-    expect(resolveDashboardForwardTarget("://localhost:bad")).toBe("18789");
+    expect(resolveDashboardForwardTarget("://localhost:bad")).toBe("9997");
   });
 
   it("handles invalid URL containing 127.0.0.1 in catch path", () => {
-    expect(resolveDashboardForwardTarget("://127.0.0.1:bad")).toBe("18789");
+    expect(resolveDashboardForwardTarget("://127.0.0.1:bad")).toBe("9997");
   });
 
   it("handles invalid URL containing ::1 in catch path", () => {
-    expect(resolveDashboardForwardTarget("://::1:bad")).toBe("18789");
+    expect(resolveDashboardForwardTarget("://::1:bad")).toBe("9997");
   });
 
   it("handles invalid URL with non-loopback in catch path", () => {
-    expect(resolveDashboardForwardTarget("://remote-host:bad")).toBe("0.0.0.0:18789");
+    expect(resolveDashboardForwardTarget("://remote-host:bad")).toBe("0.0.0.0:9997");
   });
 
   it("handles IPv6 loopback URL", () => {
-    expect(resolveDashboardForwardTarget("http://[::1]:18789")).toBe("18789");
+    expect(resolveDashboardForwardTarget("http://[::1]:9997")).toBe("9997");
   });
 });
 
@@ -71,12 +71,12 @@ describe("buildControlUiUrls", () => {
 
   it("builds URL with token hash", () => {
     const urls = buildControlUiUrls("my-token");
-    expect(urls).toEqual(["http://127.0.0.1:18789/#token=my-token"]);
+    expect(urls).toEqual(["http://127.0.0.1:9997/#token=my-token"]);
   });
 
   it("builds URL without token", () => {
     const urls = buildControlUiUrls(null);
-    expect(urls).toEqual(["http://127.0.0.1:18789/"]);
+    expect(urls).toEqual(["http://127.0.0.1:9997/"]);
   });
 
   it("includes CHAT_UI_URL when set", () => {
@@ -87,7 +87,7 @@ describe("buildControlUiUrls", () => {
   });
 
   it("deduplicates when CHAT_UI_URL matches local", () => {
-    process.env.CHAT_UI_URL = "http://127.0.0.1:18789";
+    process.env.CHAT_UI_URL = "http://127.0.0.1:9997";
     const urls = buildControlUiUrls(null);
     expect(urls).toHaveLength(1);
   });

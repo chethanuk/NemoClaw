@@ -16,7 +16,7 @@
 
 set -euo pipefail
 
-DASHBOARD_PORT="${DASHBOARD_PORT:-18789}"
+DASHBOARD_PORT="${DASHBOARD_PORT:-9997}"
 
 # ── Parse flags ──────────────────────────────────────────────────
 SANDBOX_NAME="${NEMOCLAW_SANDBOX:-${SANDBOX_NAME:-default}}"

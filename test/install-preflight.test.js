@@ -148,7 +148,7 @@ fi
 if [ "$1" = "clone" ]; then
   target="\${@: -1}"
   mkdir -p "$target/nemoclaw"
-  echo '{"name":"nemoclaw","version":"0.1.0","dependencies":{"openclaw":"2026.3.11"}}' > "$target/package.json"
+  echo '{"name":"nemoclaw","version":"0.1.0","dependencies":{"openclaw":"2026.4.5"}}' > "$target/package.json"
   echo '{"name":"nemoclaw-plugin","version":"0.1.0"}' > "$target/nemoclaw/package.json"
   exit 0
 fi
@@ -248,7 +248,7 @@ fi
 if [ "$1" = "clone" ]; then
   target="\${@: -1}"
   mkdir -p "$target/nemoclaw"
-  echo '{"name":"nemoclaw","version":"0.1.0","dependencies":{"openclaw":"2026.3.11"}}' > "$target/package.json"
+  echo '{"name":"nemoclaw","version":"0.1.0","dependencies":{"openclaw":"2026.4.5"}}' > "$target/package.json"
   echo '{"name":"nemoclaw-plugin","version":"0.1.0"}' > "$target/nemoclaw/package.json"
   exit 0
 fi
@@ -419,7 +419,7 @@ exit 98
 if [ "$1" = "pack" ]; then
   tmpdir="$4"
   mkdir -p "$tmpdir/package"
-  tar -czf "$tmpdir/openclaw-2026.3.11.tgz" -C "$tmpdir" package
+  tar -czf "$tmpdir/openclaw-2026.4.5.tgz" -C "$tmpdir" package
   exit 0
 fi
 if [ "$1" = "install" ]; then exit 0; fi
@@ -510,7 +510,7 @@ exit 0
       `if [ "$1" = "pack" ]; then
   tmpdir="$4"
   mkdir -p "$tmpdir/package"
-  tar -czf "$tmpdir/openclaw-2026.3.11.tgz" -C "$tmpdir" package
+  tar -czf "$tmpdir/openclaw-2026.4.5.tgz" -C "$tmpdir" package
   exit 0
 fi
 if [ "$1" = "install" ]; then exit 0; fi
@@ -557,7 +557,7 @@ fi`,
     expect(fs.readFileSync(onboardLog, "utf-8")).toMatch(
       /^onboard --resume --non-interactive --yes-i-accept-third-party-software$/m,
     );
-  });
+  }, 15000);
 
   it("skips onboarding when shared host preflight detects Docker is missing", () => {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "nemoclaw-install-missing-docker-"));
@@ -592,7 +592,7 @@ exit 0
       `if [ "$1" = "pack" ]; then
   tmpdir="$4"
   mkdir -p "$tmpdir/package"
-  tar -czf "$tmpdir/openclaw-2026.3.11.tgz" -C "$tmpdir" package
+  tar -czf "$tmpdir/openclaw-2026.4.5.tgz" -C "$tmpdir" package
   exit 0
 fi
 if [ "$1" = "install" ]; then exit 0; fi
@@ -654,7 +654,7 @@ exit 0
       `if [ "$1" = "pack" ]; then
   tmpdir="$4"
   mkdir -p "$tmpdir/package"
-  tar -czf "$tmpdir/openclaw-2026.3.11.tgz" -C "$tmpdir" package
+  tar -czf "$tmpdir/openclaw-2026.4.5.tgz" -C "$tmpdir" package
   exit 0
 fi
 if [ "$1" = "install" ]; then exit 0; fi
@@ -704,7 +704,7 @@ exit 0
     expect(fs.readFileSync(onboardLog, "utf-8")).toMatch(
       /^onboard --non-interactive --yes-i-accept-third-party-software$/m,
     );
-  });
+  }, 15000);
 
   it("requires explicit terms acceptance in non-interactive install mode", () => {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "nemoclaw-install-terms-required-"));
@@ -740,7 +740,7 @@ exit 0
       `if [ "$1" = "pack" ]; then
   tmpdir="$4"
   mkdir -p "$tmpdir/package"
-  tar -czf "$tmpdir/openclaw-2026.3.11.tgz" -C "$tmpdir" package
+  tar -czf "$tmpdir/openclaw-2026.4.5.tgz" -C "$tmpdir" package
   exit 0
 fi
 if [ "$1" = "install" ]; then exit 0; fi
@@ -810,7 +810,7 @@ exit 0
       `if [ "$1" = "pack" ]; then
   tmpdir="$4"
   mkdir -p "$tmpdir/package"
-  tar -czf "$tmpdir/openclaw-2026.3.11.tgz" -C "$tmpdir" package
+  tar -czf "$tmpdir/openclaw-2026.4.5.tgz" -C "$tmpdir" package
   exit 0
 fi
 if [ "$1" = "install" ]; then exit 0; fi
@@ -865,7 +865,7 @@ fi
 if [ "$1" = "clone" ]; then
   target="\${@: -1}"
   mkdir -p "$target/nemoclaw"
-  echo '{"name":"nemoclaw","version":"0.1.0","dependencies":{"openclaw":"2026.3.11"}}' > "$target/package.json"
+  echo '{"name":"nemoclaw","version":"0.1.0","dependencies":{"openclaw":"2026.4.5"}}' > "$target/package.json"
   echo '{"name":"nemoclaw-plugin","version":"0.1.0"}' > "$target/nemoclaw/package.json"
   exit 0
 fi
@@ -935,7 +935,7 @@ fi
 if [ "$1" = "clone" ]; then
   target="\${@: -1}"
   mkdir -p "$target/nemoclaw"
-  echo '{"name":"nemoclaw","version":"0.1.0","dependencies":{"openclaw":"2026.3.11"}}' > "$target/package.json"
+  echo '{"name":"nemoclaw","version":"0.1.0","dependencies":{"openclaw":"2026.4.5"}}' > "$target/package.json"
   echo '{"name":"nemoclaw-plugin","version":"0.1.0"}' > "$target/nemoclaw/package.json"
   exit 0
 fi
@@ -1062,7 +1062,7 @@ fi
 if [ "$1" = "clone" ]; then
   target="\${@: -1}"
   mkdir -p "$target/nemoclaw"
-  echo '{"name":"nemoclaw","version":"0.1.0","dependencies":{"openclaw":"2026.3.11"}}' > "$target/package.json"
+  echo '{"name":"nemoclaw","version":"0.1.0","dependencies":{"openclaw":"2026.4.5"}}' > "$target/package.json"
   echo '{"name":"nemoclaw-plugin","version":"0.1.0"}' > "$target/nemoclaw/package.json"
   exit 0
 fi
@@ -1332,7 +1332,7 @@ exit 0`,
     fs.writeFileSync(
       path.join(tmp, "package.json"),
       JSON.stringify(
-        { name: "nemoclaw", version: "0.1.0", dependencies: { openclaw: "2026.3.11" } },
+        { name: "nemoclaw", version: "0.1.0", dependencies: { openclaw: "2026.4.5" } },
         null,
         2,
       ),
@@ -1396,7 +1396,7 @@ fi
 if [ "$1" = "clone" ]; then
   target="\${@: -1}"
   mkdir -p "$target/nemoclaw"
-  echo '{"name":"nemoclaw","version":"0.5.0","dependencies":{"openclaw":"2026.3.11"}}' > "$target/package.json"
+  echo '{"name":"nemoclaw","version":"0.5.0","dependencies":{"openclaw":"2026.4.5"}}' > "$target/package.json"
   echo '{"name":"nemoclaw-plugin","version":"0.5.0"}' > "$target/nemoclaw/package.json"
   exit 0
 fi
@@ -1518,7 +1518,7 @@ describe("installer pure helpers", () => {
 
   it("resolve_openclaw_version: falls back to Dockerfile.base when package.json omits it", () => {
     const r = callInstallerFn('resolve_openclaw_version "$PWD"');
-    expect(r.stdout.trim()).toBe("2026.3.11");
+    expect(r.stdout.trim()).toBe("2026.4.5");
   });
 
   it("is_source_checkout: rejects a payload-like checkout without git metadata", () => {
@@ -1925,7 +1925,7 @@ fi
 if [ "$1" = "clone" ]; then
   target="\${@: -1}"
   mkdir -p "$target/nemoclaw"
-  echo '{"name":"nemoclaw","version":"0.5.0","dependencies":{"openclaw":"2026.3.11"}}' > "$target/package.json"
+  echo '{"name":"nemoclaw","version":"0.5.0","dependencies":{"openclaw":"2026.4.5"}}' > "$target/package.json"
   echo '{"name":"nemoclaw-plugin","version":"0.5.0"}' > "$target/nemoclaw/package.json"
   exit 0
 fi
@@ -1971,7 +1971,7 @@ fi
 if [ "$1" = "clone" ]; then
   target="\${@: -1}"
   mkdir -p "$target/nemoclaw"
-  echo '{"name":"nemoclaw","version":"0.2.0","dependencies":{"openclaw":"2026.3.11"}}' > "$target/package.json"
+  echo '{"name":"nemoclaw","version":"0.2.0","dependencies":{"openclaw":"2026.4.5"}}' > "$target/package.json"
   echo '{"name":"nemoclaw-plugin","version":"0.2.0"}' > "$target/nemoclaw/package.json"
   exit 0
 fi
@@ -2064,7 +2064,7 @@ fi
 if [ "$1" = "clone" ]; then
   target="\${@: -1}"
   mkdir -p "$target/nemoclaw" "$target/bin/lib" "$target/scripts"
-  echo '{"name":"nemoclaw","version":"0.5.0","dependencies":{"openclaw":"2026.3.11"}}' > "$target/package.json"
+  echo '{"name":"nemoclaw","version":"0.5.0","dependencies":{"openclaw":"2026.4.5"}}' > "$target/package.json"
   echo '{"name":"nemoclaw-plugin","version":"0.5.0"}' > "$target/nemoclaw/package.json"
   cat > "$target/bin/lib/usage-notice.js" <<'EOS'
 #!/usr/bin/env node

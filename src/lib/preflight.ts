@@ -483,7 +483,7 @@ export async function checkPortAvailable(
   port?: number,
   opts?: CheckPortOpts,
 ): Promise<PortProbeResult> {
-  const p = port ?? 18789;
+  const p = port ?? 9997;
   const o = opts || {};
 
   // ── lsof path ──────────────────────────────────────────────────

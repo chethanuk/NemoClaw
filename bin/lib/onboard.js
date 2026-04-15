@@ -236,7 +236,7 @@ function getSandboxReuseState(sandboxName) {
 function repairRecordedSandbox(sandboxName) {
   if (!sandboxName) return;
   note(`  [resume] Cleaning up recorded sandbox '${sandboxName}' before recreating it.`);
-  runOpenshell(["forward", "stop", "18789"], { ignoreError: true });
+  runOpenshell(["forward", "stop", String(CONTROL_UI_PORT)], { ignoreError: true });
   runOpenshell(["sandbox", "delete", sandboxName], { ignoreError: true });
   registry.removeSandbox(sandboxName);
 }
@@ -1572,7 +1572,7 @@ async function preflight() {
   const gatewayReuseState = getGatewayReuseState(gatewayStatus, gwInfo, activeGatewayInfo);
   if (gatewayReuseState === "stale" || gatewayReuseState === "active-unnamed") {
     console.log("  Cleaning up previous NemoClaw session...");
-    runOpenshell(["forward", "stop", "18789"], { ignoreError: true });
+    runOpenshell(["forward", "stop", String(CONTROL_UI_PORT)], { ignoreError: true });
     const destroyResult = runOpenshell(["gateway", "destroy", "-g", GATEWAY_NAME], {
       ignoreError: true,
     });
@@ -1584,15 +1584,15 @@ async function preflight() {
     console.log("  ✓ Previous session cleaned up");
   }
 
-  // Required ports — gateway (8080) and dashboard (18789)
+  // Required ports — gateway (8080) and dashboard (CONTROL_UI_PORT)
   const requiredPorts = [
     { port: 8080, label: "OpenShell gateway" },
-    { port: 18789, label: "NemoClaw dashboard" },
+    { port: CONTROL_UI_PORT, label: "NemoClaw dashboard" },
   ];
   for (const { port, label } of requiredPorts) {
     const portCheck = await checkPortAvailable(port);
     if (!portCheck.ok) {
-      if ((port === 8080 || port === 18789) && gatewayReuseState === "healthy") {
+      if ((port === 8080 || port === CONTROL_UI_PORT) && gatewayReuseState === "healthy") {
         console.log(`  ✓ Port ${port} already owned by healthy NemoClaw runtime (${label})`);
         continue;
       }
@@ -2187,7 +2187,7 @@ async function createSandbox(
   console.log("  Waiting for NemoClaw dashboard to become ready...");
   for (let i = 0; i < 15; i++) {
     const readyMatch = runCapture(
-      `openshell sandbox exec ${sandboxName} curl -sf http://localhost:18789/ 2>/dev/null || echo "no"`,
+      `openshell sandbox exec ${sandboxName} curl -sf http://localhost:${CONTROL_UI_PORT}/ 2>/dev/null || echo "no"`,
       { ignoreError: true },
     );
     if (readyMatch && !readyMatch.includes("no")) {
@@ -2201,7 +2201,7 @@ async function createSandbox(
     }
   }
 
-  // Release any stale forward on port 18789 before claiming it for the new sandbox.
+  // Release any stale forward on the dashboard port before claiming it for the new sandbox.
   // A previous onboard run may have left the port forwarded to a different sandbox,
   // which would silently prevent the new sandbox's dashboard from being reachable.
   ensureDashboardForward(sandboxName, chatUiUrl);
@@ -3474,7 +3474,7 @@ async function setupPoliciesWithSelection(sandboxName, options = {}) {
 
 // ── Dashboard ────────────────────────────────────────────────────
 
-const CONTROL_UI_PORT = 18789;
+const CONTROL_UI_PORT = 9997;
 
 // Dashboard helpers — delegated to src/lib/dashboard.ts
 // isLoopbackHostname — see urlUtils import above
@@ -3557,7 +3557,7 @@ function printDashboard(sandboxName, model, provider, nimContainer = null) {
 
   console.log("");
   console.log(`  ${"─".repeat(50)}`);
-  // console.log(`  Dashboard    http://localhost:18789/`);
+  // console.log(`  Dashboard    http://localhost:9997/`);
   console.log(`  Sandbox      ${sandboxName} (Landlock + seccomp + netns)`);
   console.log(`  Model        ${model} (${providerLabel})`);
   console.log(`  NIM          ${nimLabel}`);

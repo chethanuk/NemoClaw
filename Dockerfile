@@ -54,7 +54,7 @@ RUN chmod 755 /usr/local/bin/nemoclaw-start
 ARG NEMOCLAW_MODEL=nvidia/nemotron-3-super-120b-a12b
 ARG NEMOCLAW_PROVIDER_KEY=nvidia
 ARG NEMOCLAW_PRIMARY_MODEL_REF=nvidia/nemotron-3-super-120b-a12b
-ARG CHAT_UI_URL=http://127.0.0.1:18789
+ARG CHAT_UI_URL=http://127.0.0.1:9997
 ARG NEMOCLAW_INFERENCE_BASE_URL=https://inference.local/v1
 ARG NEMOCLAW_INFERENCE_API=openai-completions
 ARG NEMOCLAW_INFERENCE_COMPAT_B64=e30=
@@ -114,11 +114,11 @@ _token_keys = {'discord': 'token', 'telegram': 'botToken', 'slack': 'botToken'};
 _env_keys = {'discord': 'DISCORD_BOT_TOKEN', 'telegram': 'TELEGRAM_BOT_TOKEN', 'slack': 'SLACK_BOT_TOKEN'}; \
 _ch_cfg = {ch: {'accounts': {'main': {_token_keys[ch]: f'openshell:resolve:env:{_env_keys[ch]}', 'enabled': True, **({'dmPolicy': 'allowlist', 'allowFrom': _allowed_ids[ch]} if ch in _allowed_ids and _allowed_ids[ch] else {})}}} for ch in msg_channels if ch in _token_keys}; \
 parsed = urlparse(chat_ui_url); \
-chat_origin = f'{parsed.scheme}://{parsed.netloc}' if parsed.scheme and parsed.netloc else 'http://127.0.0.1:18789'; \
-origins = ['http://127.0.0.1:18789']; \
+chat_origin = f'{parsed.scheme}://{parsed.netloc}' if parsed.scheme and parsed.netloc else 'http://127.0.0.1:9997'; \
+origins = ['http://127.0.0.1:9997', 'http://localhost:9997']; \
 origins = list(dict.fromkeys(origins + [chat_origin])); \
 disable_device_auth = os.environ.get('NEMOCLAW_DISABLE_DEVICE_AUTH', '') == '1'; \
-allow_insecure = parsed.scheme == 'http'; \
+allow_insecure = True if parsed.hostname in ('127.0.0.1', 'localhost', '::1') else parsed.scheme == 'http'; \
 providers = { \
     provider_key: { \
         'baseUrl': inference_base_url, \
